@@ -1,4 +1,4 @@
-package com.iteye.wwwcomy.poi;
+package com.iteye.wwwcomy.poi.dao;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
