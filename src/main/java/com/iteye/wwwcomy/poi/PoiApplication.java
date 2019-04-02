@@ -33,5 +33,6 @@ public class PoiApplication {
 		logger.info("PoiApplication Started...");
 		List<Map<String, String>> organizations = reader.readToList();
 		writer.writeToFile(organizations);
+		logger.info("To close this console, Press Ctrl+C");
 	}
 }
