@@ -11,9 +11,12 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFChart;
+import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTValAx;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -24,7 +27,7 @@ public class ExcelReader {
 	private String excelFilePath;
 	private XSSFWorkbook workbook;
 	public static final String SHEET_NUM = "数";
-	public static final String SHEET_DIAGRAM = "图";
+	public static final String SHEET_CHART = "图";
 
 	@PostConstruct
 	public void init() throws Exception {
@@ -71,5 +74,21 @@ public class ExcelReader {
 			result.add(singleRowMap);
 		}
 		return result;
+	}
+
+	/**
+	 * 
+	 */
+	public void readChart() {
+		XSSFSheet sheet = workbook.getSheet(SHEET_CHART);
+		// HSSFChart
+		XSSFDrawing drawing = sheet.createDrawingPatriarch();
+		List<XSSFChart> charts = drawing.getCharts();
+		for (XSSFChart chart : charts) {
+			List<CTValAx> ctValAxList = chart.getCTChart().getPlotArea().getValAxList();
+			for (CTValAx val : ctValAxList) {
+				System.out.println(val);
+			}
+		}
 	}
 }

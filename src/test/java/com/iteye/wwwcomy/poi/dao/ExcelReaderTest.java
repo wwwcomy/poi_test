@@ -29,5 +29,10 @@ public class ExcelReaderTest {
 				new TypeReference<List<Organization>>() {
 				}));
 	}
+	
+	@Test
+	public void canGetChart() {
+		reader.readChart();
+	}
 
 }
