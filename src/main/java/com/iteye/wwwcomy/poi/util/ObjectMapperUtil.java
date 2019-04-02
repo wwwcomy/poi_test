@@ -72,7 +72,7 @@ public class ObjectMapperUtil {
 			// Did not find good solutions for abstract class, returning null directly
 			return null;
 		} else {
-			return BeanUtils.instantiate(trClass);
+			return BeanUtils.instantiateClass(trClass);
 		}
 	}
 
