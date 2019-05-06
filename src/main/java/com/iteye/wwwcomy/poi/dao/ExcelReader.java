@@ -20,13 +20,16 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.CTValAx;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import com.iteye.wwwcomy.poi.util.NumberFormatUtil;
+
 @Repository
 public class ExcelReader {
 
 	@Value(value = "${poi.excel.path}")
 	private String excelFilePath;
 	private XSSFWorkbook workbook;
-	public static final String SHEET_NUM = "数";
+	@Value(value = "${poi.excel.sheet.name}")
+	public String SHEET_NUM;
 	public static final String SHEET_CHART = "图";
 
 	@PostConstruct
@@ -69,7 +72,13 @@ public class ExcelReader {
 				break;
 			}
 			for (int j = 0; j < currentRow.getLastCellNum(); j++) {
-				singleRowMap.put(headers.get(j), dataFormatter.formatCellValue(currentRow.getCell(j)));
+				if (currentRow.getCell(j) != null && currentRow.getCell(j).getCellStyle() != null && "0\\.00,,\"亿\""
+						.equalsIgnoreCase(currentRow.getCell(j).getCellStyle().getDataFormatString())) {
+					singleRowMap.put(headers.get(j), NumberFormatUtil
+							.formatAsHundredMillion(dataFormatter.formatCellValue(currentRow.getCell(j))));
+				} else {
+					singleRowMap.put(headers.get(j), dataFormatter.formatCellValue(currentRow.getCell(j)));
+				}
 			}
 			result.add(singleRowMap);
 		}

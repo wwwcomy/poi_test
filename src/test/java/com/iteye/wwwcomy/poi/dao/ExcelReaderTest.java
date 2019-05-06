@@ -21,9 +21,9 @@ public class ExcelReaderTest {
 
 	@Test
 	public void canGetRowsAndCols() {
-		System.out.println(reader.getWorkBook().getSheet(ExcelReader.SHEET_NUM).getLastRowNum());
-		System.out.println(reader.getWorkBook().getSheet(ExcelReader.SHEET_NUM).getRow(2).getCell(0));
-		System.out.println(reader.getWorkBook().getSheet(ExcelReader.SHEET_NUM).getRow(2).getLastCellNum());
+		System.out.println(reader.getWorkBook().getSheet(reader.SHEET_NUM).getLastRowNum());
+		System.out.println(reader.getWorkBook().getSheet(reader.SHEET_NUM).getRow(2).getCell(0));
+		System.out.println(reader.getWorkBook().getSheet(reader.SHEET_NUM).getRow(2).getLastCellNum());
 		System.out.println(reader.readToList());
 		System.out.println(ObjectMapperUtil.readValue(ObjectMapperUtil.writeValueAsString(reader.readToList()),
 				new TypeReference<List<Organization>>() {
