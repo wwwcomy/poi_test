@@ -31,8 +31,14 @@ public class PoiApplication {
 	@EventListener(ApplicationReadyEvent.class)
 	public void doSomethingAfterStartup() throws Exception {
 		logger.info("PoiApplication Started...");
-		List<Map<String, String>> organizations = reader.readToList();
-		writer.writeToFile(organizations);
-		logger.info("To close this console, Press Ctrl+C");
+		try {
+			List<Map<String, String>> organizations = reader.readToList();
+			writer.writeToFile(organizations);
+			logger.info("Processed all data successfully.");
+		} catch (Exception e) {
+			logger.error("Error happens, please ask author... {}", e.getMessage(), e);
+		}
+		logger.info("To close this window, Press Ctrl+C, auto-close in 30 seconds...");
+		Thread.sleep(30 * 1000);
 	}
 }
