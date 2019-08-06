@@ -1,7 +1,8 @@
 package com.iteye.wwwcomy.poi;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +12,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 
-import com.iteye.wwwcomy.poi.dao.ExcelReader;
-import com.iteye.wwwcomy.poi.dao.WordWriter;
+import com.iteye.wwwcomy.poi.service.ExcelToWordService;
+import com.iteye.wwwcomy.poi.service.ILPService;
 
 @SpringBootApplication
 public class PoiApplication {
@@ -20,25 +21,46 @@ public class PoiApplication {
 	private static final Logger logger = LoggerFactory.getLogger(PoiApplication.class);
 
 	@Autowired
-	private WordWriter writer;
-	@Autowired
-	private ExcelReader reader;
+	private ExcelToWordService service1;
+
+	private Map<String, ILPService> initMap;
 
 	public static void main(String[] args) {
 		SpringApplication.run(PoiApplication.class, args);
 	}
 
-	@EventListener(ApplicationReadyEvent.class)
-	public void doSomethingAfterStartup() throws Exception {
-		logger.info("PoiApplication Started...");
-		try {
-			List<Map<String, String>> organizations = reader.readToList();
-			writer.writeToFile(organizations);
-			logger.info("Processed all data successfully.");
-		} catch (Exception e) {
-			logger.error("Error happens, please ask author... {}", e.getMessage(), e);
+	private String doAskForTaskId() {
+		printTips();
+		Scanner scanner = new Scanner(System.in);
+		String taskId = scanner.next();
+		while (!initMap.keySet().contains(taskId)) {
+			System.out.println("Please choose a valid input!");
+			printTips();
+			taskId = scanner.next();
 		}
+		scanner.close();
+		return taskId;
+	}
+
+	private static void printTips() {
+		System.out.println("********** This is the START to choose a task ID **********");
+		System.out.println("Input 1 for Excel To Word data transfer");
+		System.out.println("Input 2 for Excel To Excel data population");
+		System.out.println("Enter your Task Name: ");
+	}
+
+	@EventListener(ApplicationReadyEvent.class)
+	public void eventDispatch() throws Exception {
+		initMap();
+		String taskId = doAskForTaskId();
+		initMap.get(taskId).doLoveLaoPoService();
 		logger.info("To close this window, Press Ctrl+C, auto-close in 30 seconds...");
 		Thread.sleep(30 * 1000);
+	}
+
+	private void initMap() {
+		initMap = new HashMap<String, ILPService>();
+		initMap.put("1", service1);
+		initMap.put("2", service1);
 	}
 }
