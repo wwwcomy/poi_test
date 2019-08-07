@@ -44,7 +44,7 @@ public class Vintage12CalcStrategy implements ExcelDataCalculateStrategy {
 
 	private List<Map<String, String>> filter(String unionCodeSheet1, String overdueSheet1,
 			List<Map<String, String>> sheet2Content) {
-		logger.info("unionCodeSheet1 as {}, overdueSheet1 as {}", unionCodeSheet1, overdueSheet1);
+//		logger.info("unionCodeSheet1 as {}, overdueSheet1 as {}", unionCodeSheet1, overdueSheet1);
 		if (StringUtils.isBlank(unionCodeSheet1) || StringUtils.isBlank(overdueSheet1)) {
 			logger.error("unionCodeSheet1 or overdueSheet1 is blank, returning empty result");
 			return Collections.emptyList();
@@ -52,7 +52,7 @@ public class Vintage12CalcStrategy implements ExcelDataCalculateStrategy {
 		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 		for (Map<String, String> rowSheet2 : sheet2Content) {
 			if (unionCodeSheet1.equalsIgnoreCase(rowSheet2.get("union_code"))
-					&& overdueSheet1.equalsIgnoreCase(rowSheet2.get("kpi")) && rowSheet2.get("入账月份").startsWith("2019/")
+					&& overdueSheet1.equalsIgnoreCase(rowSheet2.get("kpi")) && rowSheet2.get("入账月份").endsWith("/19")
 					&& "12".equalsIgnoreCase(rowSheet2.get("mob"))) {
 				result.add(rowSheet2);
 			}

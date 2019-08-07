@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jfree.util.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,11 +37,16 @@ public class ExcelDataCalculateService implements ILPService {
 		List<Map<String, String>> sheet2Content = excelDao.readToList(sheet2);
 		for (Map<String, String> line : sheet1Content) {
 			if (line.get("助贷码").matches(".*\n.*")) {
-				Log.info("Skip Line as it includes more than 1 助贷码");
+				logger.info("Skip Line as it includes more than 1 助贷码");
 				continue;
 			}
-			logger.info("line.get(\"类型\") --> {}",
-					typeAndStrategyRegistry.get(line.get("类型")).getResult(line, sheet2Content));
+			String type = line.get("类型");
+			if (!typeAndStrategyRegistry.containsKey(type)) {
+				logger.info("No strategy defined for type {}", type);
+				continue;
+			}
+			logger.info("Type {} --> Result {}", type,
+					typeAndStrategyRegistry.get(type).getResult(line, sheet2Content));
 		}
 	}
 

@@ -52,7 +52,7 @@ public class Vintage1CalcStrategy implements ExcelDataCalculateStrategy {
 		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 		for (Map<String, String> rowSheet2 : sheet2Content) {
 			if (unionCodeSheet1.equalsIgnoreCase(rowSheet2.get("union_code"))
-					&& overdueSheet1.equalsIgnoreCase(rowSheet2.get("kpi")) && rowSheet2.get("入账月份").startsWith("2019/")
+					&& overdueSheet1.equalsIgnoreCase(rowSheet2.get("kpi")) && rowSheet2.get("入账月份").endsWith("/19")
 					&& "1".equalsIgnoreCase(rowSheet2.get("mob"))) {
 				result.add(rowSheet2);
 			}

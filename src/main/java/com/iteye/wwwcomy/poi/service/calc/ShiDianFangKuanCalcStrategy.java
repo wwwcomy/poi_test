@@ -40,17 +40,17 @@ public class ShiDianFangKuanCalcStrategy implements ExcelDataCalculateStrategy {
 				denominator += Double.valueOf(row.get("放款金额"));
 			}
 		}
-		System.out.println(denominator);
+		System.out.println("****" + denominator);
 		denominator = filteredSheet2Result.stream().filter(row -> "0".equalsIgnoreCase(row.get("mob")))
 				.mapToDouble(row -> Double.valueOf(row.get("放款金额"))).sum();
-		System.out.println(denominator);
+		System.out.println("****" + denominator);
 		// TODO not finished yet
 		return maxPercentage;
 	}
 
 	private List<Map<String, String>> filter(String unionCodeSheet1, String overdueSheet1,
 			List<Map<String, String>> sheet2Content) {
-		logger.info("unionCodeSheet1 as {}, overdueSheet1 as {}", unionCodeSheet1, overdueSheet1);
+//		logger.info("unionCodeSheet1 as {}, overdueSheet1 as {}", unionCodeSheet1, overdueSheet1);
 		if (StringUtils.isBlank(unionCodeSheet1) || StringUtils.isBlank(overdueSheet1)) {
 			logger.error("unionCodeSheet1 or overdueSheet1 is blank, returning empty result");
 			return Collections.emptyList();
@@ -58,8 +58,7 @@ public class ShiDianFangKuanCalcStrategy implements ExcelDataCalculateStrategy {
 		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 		for (Map<String, String> rowSheet2 : sheet2Content) {
 			if (unionCodeSheet1.equalsIgnoreCase(rowSheet2.get("union_code"))
-					&& overdueSheet1.equalsIgnoreCase(rowSheet2.get("kpi"))
-					&& rowSheet2.get("入账月份").startsWith("2019/")) {
+					&& overdueSheet1.equalsIgnoreCase(rowSheet2.get("kpi")) && rowSheet2.get("入账月份").endsWith("/19")) {
 				result.add(rowSheet2);
 			}
 		}
