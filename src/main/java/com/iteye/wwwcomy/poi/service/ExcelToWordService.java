@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.iteye.wwwcomy.poi.dao.ExcelReader;
+import com.iteye.wwwcomy.poi.dao.ExcelDao;
 import com.iteye.wwwcomy.poi.dao.WordWriter;
 
 @Service
@@ -17,13 +17,13 @@ public class ExcelToWordService implements ILPService {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private WordWriter writer;
-	private ExcelReader reader;
+	private ExcelDao reader;
 
-	public ExcelReader getReader() {
+	public ExcelDao getReader() {
 		return reader;
 	}
 
-	public void setReader(ExcelReader reader) {
+	public void setReader(ExcelDao reader) {
 		this.reader = reader;
 	}
 

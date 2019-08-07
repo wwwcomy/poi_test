@@ -18,13 +18,13 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.CTValAx;
 
 import com.iteye.wwwcomy.poi.util.NumberFormatUtil;
 
-public class ExcelReader {
+public class ExcelDao {
 
 	private String excelFilePath;
 	private XSSFWorkbook workbook;
 	public static final String SHEET_CHART = "图";
 
-	public ExcelReader(String f) throws Exception {
+	public ExcelDao(String f) throws Exception {
 		this.excelFilePath = f;
 		// 实例化excel 文件的FileInputStream 对象
 		FileInputStream fis = new FileInputStream(excelFilePath);

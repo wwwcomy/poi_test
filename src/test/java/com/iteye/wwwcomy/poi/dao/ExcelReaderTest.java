@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class ExcelReaderTest {
 
 	@Autowired
-	private ExcelReader reader;
+	private ExcelDao reader;
 
 	@Test
 	public void canGetRowsAndCols() {
