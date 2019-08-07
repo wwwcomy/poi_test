@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -17,23 +15,17 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTValAx;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Repository;
 
 import com.iteye.wwwcomy.poi.util.NumberFormatUtil;
 
-@Repository
 public class ExcelReader {
 
-	@Value(value = "${poi.excel.path}")
 	private String excelFilePath;
 	private XSSFWorkbook workbook;
-	@Value(value = "${poi.excel.sheet.name}")
-	public String SHEET_NUM;
 	public static final String SHEET_CHART = "图";
 
-	@PostConstruct
-	public void init() throws Exception {
+	public ExcelReader(String f) throws Exception {
+		this.excelFilePath = f;
 		// 实例化excel 文件的FileInputStream 对象
 		FileInputStream fis = new FileInputStream(excelFilePath);
 		// 实例化excel 文件的XSSFWorkbook 对象
@@ -53,8 +45,8 @@ public class ExcelReader {
 		return dataFormatter.formatCellValue(cell);
 	}
 
-	public List<Map<String, String>> readToList() {
-		XSSFSheet sheet = workbook.getSheet(SHEET_NUM);
+	public List<Map<String, String>> readToList(String sheetNum) {
+		XSSFSheet sheet = workbook.getSheet(sheetNum);
 		List<String> headers = new ArrayList<String>();
 		XSSFRow firstRow = sheet.getRow(0);
 		DataFormatter dataFormatter = new DataFormatter();

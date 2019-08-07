@@ -6,12 +6,14 @@ import java.util.Scanner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
 
+import com.iteye.wwwcomy.poi.dao.ExcelReaderFactory;
 import com.iteye.wwwcomy.poi.service.ExcelToWordService;
 import com.iteye.wwwcomy.poi.service.ILPService;
 
@@ -20,13 +22,20 @@ public class PoiApplication {
 
 	private static final Logger logger = LoggerFactory.getLogger(PoiApplication.class);
 
-	@Autowired
-	private ExcelToWordService service1;
+	@Value(value = "${poi.excel.path}")
+	public String excelPath;
 
 	private Map<String, ILPService> initMap;
 
 	public static void main(String[] args) {
 		SpringApplication.run(PoiApplication.class, args);
+	}
+
+	@Bean
+	public ExcelToWordService initExcelToWordService() throws Exception {
+		ExcelToWordService excelToWordService = new ExcelToWordService();
+		excelToWordService.setReader(ExcelReaderFactory.getExcelReader(excelPath));
+		return excelToWordService;
 	}
 
 	private String doAskForTaskId() {
@@ -58,9 +67,9 @@ public class PoiApplication {
 		Thread.sleep(30 * 1000);
 	}
 
-	private void initMap() {
+	private void initMap() throws Exception {
 		initMap = new HashMap<String, ILPService>();
-		initMap.put("1", service1);
-		initMap.put("2", service1);
+		initMap.put("1", initExcelToWordService());
+		initMap.put("2", initExcelToWordService());
 	}
 }
