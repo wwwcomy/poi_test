@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.deepoove.poi.XWPFTemplate;
-import com.iteye.wwwcomy.authservice.exception.SysInternalException;
+import com.iteye.wwwcomy.poi.exception.SysInternalException;
 import com.iteye.wwwcomy.poi.util.IOUtil;
 
 @Repository

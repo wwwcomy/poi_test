@@ -1,4 +1,4 @@
-package com.iteye.wwwcomy.authservice.exception;
+package com.iteye.wwwcomy.poi.exception;
 
 /**
  * Indicates that the entity is not found

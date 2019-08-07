@@ -1,4 +1,4 @@
-package com.iteye.wwwcomy.authservice.exception;
+package com.iteye.wwwcomy.poi.exception;
 
 /**
  * Indicates a system internal exception which should be transparent to the end

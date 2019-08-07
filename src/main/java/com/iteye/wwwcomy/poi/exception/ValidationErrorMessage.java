@@ -1,4 +1,4 @@
-package com.iteye.wwwcomy.authservice.exception;
+package com.iteye.wwwcomy.poi.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
