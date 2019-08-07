@@ -11,14 +11,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
- * vintage <br>
- * 表1.助贷码=表2.union_code，表1.逾期时间=表2.kpi，表2.入账月份为19年，取MAX(表2.放款逾期率）
+ * 时点放款 <br>
+ * 表1.助贷码=表2.union_code，表1.逾期时间=表2.kpi，表2.入账月份为19年，
+ * 分母：取所有表2.mob=0的表2.放款金额相加，分子：每一个月份分别取表2.mob最大的那行的表2.逾期余额的值，相加，取分子/分母
  * 
  * @author xingnliu
  *
  */
 @Service
-public class VintageCalcStrategy implements ExcelDataCalculateStrategy {
+public class ShiDianFangKuanCalcStrategy implements ExcelDataCalculateStrategy {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -27,18 +28,23 @@ public class VintageCalcStrategy implements ExcelDataCalculateStrategy {
 		String unionCodeSheet1 = currentRowInSheet1.get("助贷码");
 		String overdueSheet1 = currentRowInSheet1.get("逾期时间");
 		List<Map<String, String>> filteredSheet2Result = filter(unionCodeSheet1, overdueSheet1, sheet2Content);
-		double maxLoanOverduePercentage = getMaxLoanOverduePercentage(filteredSheet2Result);
+		double maxLoanOverduePercentage = getCaculateResult(filteredSheet2Result);
 		return String.valueOf(maxLoanOverduePercentage);
 	}
 
-	private double getMaxLoanOverduePercentage(List<Map<String, String>> filteredSheet2Result) {
+	private double getCaculateResult(List<Map<String, String>> filteredSheet2Result) {
 		double maxPercentage = 0.0;
+		double denominator = 0.0;
 		for (Map<String, String> row : filteredSheet2Result) {
-			double tmpLoanOverduePercentage = Double.parseDouble(row.get("放款逾期率"));
-			if (tmpLoanOverduePercentage > maxPercentage) {
-				maxPercentage = tmpLoanOverduePercentage;
+			if ("0".equalsIgnoreCase(row.get("mob"))) {
+				denominator += Double.valueOf(row.get("放款金额"));
 			}
 		}
+		System.out.println(denominator);
+		denominator = filteredSheet2Result.stream().filter(row -> "0".equalsIgnoreCase(row.get("mob")))
+				.mapToDouble(row -> Double.valueOf(row.get("放款金额"))).sum();
+		System.out.println(denominator);
+		// TODO not finished yet
 		return maxPercentage;
 	}
 

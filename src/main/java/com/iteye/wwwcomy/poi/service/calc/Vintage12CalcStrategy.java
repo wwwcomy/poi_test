@@ -11,14 +11,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
- * vintage <br>
- * 表1.助贷码=表2.union_code，表1.逾期时间=表2.kpi，表2.入账月份为19年，取MAX(表2.放款逾期率）
+ * vintage12 <br>
+ * 表1.助贷码=表2.union_code，表1.逾期时间=表2.kpi，表2.入账月份为19年，表2.mob=12，取MAX(表2.放款逾期率）
  * 
  * @author xingnliu
  *
  */
 @Service
-public class VintageCalcStrategy implements ExcelDataCalculateStrategy {
+public class Vintage12CalcStrategy implements ExcelDataCalculateStrategy {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -52,8 +52,8 @@ public class VintageCalcStrategy implements ExcelDataCalculateStrategy {
 		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 		for (Map<String, String> rowSheet2 : sheet2Content) {
 			if (unionCodeSheet1.equalsIgnoreCase(rowSheet2.get("union_code"))
-					&& overdueSheet1.equalsIgnoreCase(rowSheet2.get("kpi"))
-					&& rowSheet2.get("入账月份").startsWith("2019/")) {
+					&& overdueSheet1.equalsIgnoreCase(rowSheet2.get("kpi")) && rowSheet2.get("入账月份").startsWith("2019/")
+					&& "12".equalsIgnoreCase(rowSheet2.get("mob"))) {
 				result.add(rowSheet2);
 			}
 		}
