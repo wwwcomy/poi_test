@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
 
 import com.iteye.wwwcomy.poi.dao.ExcelReaderFactory;
+import com.iteye.wwwcomy.poi.service.ExcelDataCalculateService;
 import com.iteye.wwwcomy.poi.service.ExcelToWordService;
 import com.iteye.wwwcomy.poi.service.ILPService;
 
@@ -24,6 +25,8 @@ public class PoiApplication {
 
 	@Value(value = "${poi.excel.path}")
 	public String excelPath;
+	@Value(value = "${poi.task2.excel.path}")
+	public String task2ExcelPath;
 
 	private Map<String, ILPService> initMap;
 
@@ -34,8 +37,15 @@ public class PoiApplication {
 	@Bean
 	public ExcelToWordService initExcelToWordService() throws Exception {
 		ExcelToWordService excelToWordService = new ExcelToWordService();
-		excelToWordService.setReader(ExcelReaderFactory.getExcelReader(excelPath));
+		excelToWordService.setExcelDao(ExcelReaderFactory.getExcelReader(excelPath));
 		return excelToWordService;
+	}
+
+	@Bean
+	public ExcelDataCalculateService initExcelDataCalculateService() throws Exception {
+		ExcelDataCalculateService service = new ExcelDataCalculateService();
+		service.setExcelDao(ExcelReaderFactory.getExcelReader(task2ExcelPath));
+		return service;
 	}
 
 	private String doAskForTaskId() {
@@ -70,6 +80,6 @@ public class PoiApplication {
 	private void initMap() throws Exception {
 		initMap = new HashMap<String, ILPService>();
 		initMap.put("1", initExcelToWordService());
-		initMap.put("2", initExcelToWordService());
+		initMap.put("2", initExcelDataCalculateService());
 	}
 }

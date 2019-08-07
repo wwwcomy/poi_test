@@ -7,23 +7,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import com.iteye.wwwcomy.poi.dao.ExcelDao;
 import com.iteye.wwwcomy.poi.dao.WordWriter;
 
-@Service
 public class ExcelToWordService implements ILPService {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private WordWriter writer;
 	private ExcelDao reader;
 
-	public ExcelDao getReader() {
-		return reader;
-	}
-
-	public void setReader(ExcelDao reader) {
+	public void setExcelDao(ExcelDao reader) {
 		this.reader = reader;
 	}
 

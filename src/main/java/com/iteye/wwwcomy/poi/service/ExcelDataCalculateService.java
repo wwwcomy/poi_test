@@ -14,12 +14,20 @@ import com.iteye.wwwcomy.poi.dao.WordWriter;
 public class ExcelDataCalculateService implements ILPService {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private ExcelDao excelDao;
-	@Value(value = "${poi.excel.sheet.name}")
-	public String SHEET_NUM;
+	public String sheet1 = "表1";
+	public String sheet2 = "表2";
 
 	@Override
 	public void doLoveLaoPoService() {
+		List<Map<String, String>> sheet1Content = excelDao.readToList(sheet1);
+		List<Map<String, String>> sheet2Content = excelDao.readToList(sheet2);
+		for (Map<String, String> line : sheet1Content) {
 
+		}
+	}
+
+	public void setExcelDao(ExcelDao excelDao) {
+		this.excelDao = excelDao;
 	}
 
 }
