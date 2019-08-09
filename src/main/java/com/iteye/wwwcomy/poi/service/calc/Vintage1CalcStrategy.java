@@ -44,7 +44,6 @@ public class Vintage1CalcStrategy implements ExcelDataCalculateStrategy {
 
 	private List<Map<String, String>> filter(String unionCodeSheet1, String overdueSheet1,
 			List<Map<String, String>> sheet2Content) {
-		logger.info("unionCodeSheet1 as {}, overdueSheet1 as {}", unionCodeSheet1, overdueSheet1);
 		if (StringUtils.isBlank(unionCodeSheet1) || StringUtils.isBlank(overdueSheet1)) {
 			logger.error("unionCodeSheet1 or overdueSheet1 is blank, returning empty result");
 			return Collections.emptyList();

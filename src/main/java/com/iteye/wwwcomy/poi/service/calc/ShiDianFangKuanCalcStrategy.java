@@ -2,8 +2,11 @@ package com.iteye.wwwcomy.poi.service.calc;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -33,32 +36,31 @@ public class ShiDianFangKuanCalcStrategy implements ExcelDataCalculateStrategy {
 	}
 
 	private double getCaculateResult(List<Map<String, String>> filteredSheet2Result) {
-		double maxPercentage = 0.0;
-		double denominator = 0.0;
-		for (Map<String, String> row : filteredSheet2Result) {
-			if ("0".equalsIgnoreCase(row.get("mob"))) {
-				denominator += Double.valueOf(row.get("放款金额"));
-			}
-		}
-		System.out.println("****" + denominator);
-		denominator = filteredSheet2Result.stream().filter(row -> "0".equalsIgnoreCase(row.get("mob")))
+		double denominator = filteredSheet2Result.stream().filter(row -> "0".equalsIgnoreCase(row.get("mob")))
 				.mapToDouble(row -> Double.valueOf(row.get("放款金额"))).sum();
-		System.out.println("****" + denominator);
-		// TODO not finished yet
-		return maxPercentage;
+		double numerator = 0.0;
+		Map<Object, List<Map<String, String>>> groupedMap = filteredSheet2Result.stream()
+				.collect(Collectors.groupingBy(o -> o.get("入账月份")));
+		for (Object eachMonth : groupedMap.keySet()) {
+			List<Map<String, String>> monthDataList = groupedMap.get(eachMonth);
+			Optional<Map<String, String>> maxItem = monthDataList.stream()
+					.max(Comparator.comparingInt(o -> Integer.valueOf(o.get("mob"))));
+			numerator += Double.valueOf(maxItem.get().get("逾期余额"));
+		}
+		return numerator / denominator;
 	}
 
 	private List<Map<String, String>> filter(String unionCodeSheet1, String overdueSheet1,
 			List<Map<String, String>> sheet2Content) {
-//		logger.info("unionCodeSheet1 as {}, overdueSheet1 as {}", unionCodeSheet1, overdueSheet1);
 		if (StringUtils.isBlank(unionCodeSheet1) || StringUtils.isBlank(overdueSheet1)) {
 			logger.error("unionCodeSheet1 or overdueSheet1 is blank, returning empty result");
 			return Collections.emptyList();
 		}
 		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 		for (Map<String, String> rowSheet2 : sheet2Content) {
-			if (unionCodeSheet1.equalsIgnoreCase(rowSheet2.get("union_code"))
-					&& overdueSheet1.equalsIgnoreCase(rowSheet2.get("kpi")) && rowSheet2.get("入账月份").endsWith("/19")) {
+			if (unionCodeSheet1.trim().equalsIgnoreCase(rowSheet2.get("union_code").trim())
+					&& overdueSheet1.trim().equalsIgnoreCase(rowSheet2.get("kpi").trim())
+					&& rowSheet2.get("入账月份").endsWith("/19")) {
 				result.add(rowSheet2);
 			}
 		}
