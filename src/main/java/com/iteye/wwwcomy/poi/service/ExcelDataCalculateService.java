@@ -40,11 +40,6 @@ public class ExcelDataCalculateService implements ILPService {
 		int l = 0;
 		for (Map<String, String> line : sheet1Content) {
 			l++;
-			if (line.get("助贷码").matches(".*\n.*")) {
-				logger.info("Skip Line as it includes more than 1 助贷码");
-				excelDao.updateCell(sheet1, l, lastCol, "more than 1 助贷码");
-				continue;
-			}
 			String type = line.get("类型");
 			if (!typeAndStrategyRegistry.containsKey(type)) {
 				logger.info("No strategy defined for type {}", type);

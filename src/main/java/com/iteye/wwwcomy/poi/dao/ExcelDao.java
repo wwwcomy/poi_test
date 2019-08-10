@@ -72,7 +72,7 @@ public class ExcelDao {
 		XSSFRow firstRow = sheet.getRow(0);
 		DataFormatter dataFormatter = new DataFormatter();
 		for (int i = 0; i < firstRow.getLastCellNum(); i++) {
-			headers.add(dataFormatter.formatCellValue(firstRow.getCell(i)));
+			headers.add(dataFormatter.formatCellValue(firstRow.getCell(i)).trim());
 		}
 		List<Map<String, String>> result = new ArrayList<>();
 		int headerColCount = headers.size();
@@ -95,7 +95,7 @@ public class ExcelDao {
 					singleRowMap.put(headers.get(j), NumberFormatUtil
 							.formatAsHundredMillion(dataFormatter.formatCellValue(currentRow.getCell(j))));
 				} else {
-					singleRowMap.put(headers.get(j), dataFormatter.formatCellValue(currentRow.getCell(j)));
+					singleRowMap.put(headers.get(j), dataFormatter.formatCellValue(currentRow.getCell(j)).trim());
 				}
 			}
 			result.add(singleRowMap);
