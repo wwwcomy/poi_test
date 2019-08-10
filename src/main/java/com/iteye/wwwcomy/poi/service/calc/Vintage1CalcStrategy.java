@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +15,10 @@ import org.springframework.stereotype.Service;
  * vintage1 <br>
  * 表1.助贷码=表2.union_code，表1.逾期时间=表2.kpi，表2.入账月份为19年，表2.mob=1，取MAX(表2.放款逾期率）
  * 
- * @author xingnliu
- *
+ * @author xingnliu *
  */
 @Service
 public class Vintage1CalcStrategy implements ExcelDataCalculateStrategy {
-
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Override
@@ -55,5 +52,4 @@ public class Vintage1CalcStrategy implements ExcelDataCalculateStrategy {
 		}
 		return result;
 	}
-
 }

@@ -7,23 +7,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
- * 时点放款 <br>
+ * * 时点放款 <br>
  * 表1.助贷码=表2.union_code，表1.逾期时间=表2.kpi，表2.入账月份为19年，
- * 分母：取所有表2.mob=0的表2.放款金额相加，分子：每一个月份分别取表2.mob最大的那行的表2.逾期余额的值，相加，取分子/分母
+ * 分母：取所有表2.mob=0的表2.放款金额相加，分子：每一个月份分别取表2.mob最大的那行的表2.逾期余额的值，相加，取分子/分母 *
  * 
- * @author xingnliu
- *
+ * @author xingnliu *
  */
 @Service
 public class ShiDianFangKuanCalcStrategy implements ExcelDataCalculateStrategy {
-
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Override
@@ -71,5 +68,4 @@ public class ShiDianFangKuanCalcStrategy implements ExcelDataCalculateStrategy {
 		}
 		return result;
 	}
-
 }
