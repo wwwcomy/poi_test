@@ -1,16 +1,22 @@
 package com.iteye.wwwcomy.poi.service.calc;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import com.iteye.wwwcomy.poi.exception.InvalidParameterException;
 
 /**
  * * 时点放款 <br>
@@ -49,7 +55,12 @@ public class ShiDianFangKuanCalcStrategy implements ExcelDataCalculateStrategy {
 
 	private String getMonth(Map<String, String> inputRow) {
 		String rawMonth = inputRow.get("入账月份");
-		return rawMonth;
+		try {
+			Date d = new SimpleDateFormat("m/d/yy").parse("1/1/19");
+			return new SimpleDateFormat("yyyy-MM").format(d);
+		} catch (ParseException e) {
+			throw new InvalidParameterException("The input date format is not \"m/d/yy\", please check:" + rawMonth);
+		}
 	}
 
 	private List<Map<String, String>> filter(String unionCodeSheet1, String overdueSheet1,
