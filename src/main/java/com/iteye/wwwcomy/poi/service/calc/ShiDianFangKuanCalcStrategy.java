@@ -35,6 +35,9 @@ public class ShiDianFangKuanCalcStrategy implements ExcelDataCalculateStrategy {
 		String overdueSheet1 = currentRowInSheet1.get("逾期时间");
 		List<Map<String, String>> filteredSheet2Result = filter(unionCodeSheet1, overdueSheet1, sheet2Content);
 		double maxLoanOverduePercentage = getCaculateResult(filteredSheet2Result);
+		if (Double.isNaN(maxLoanOverduePercentage)) {
+			return "";
+		}
 		return String.valueOf(maxLoanOverduePercentage);
 	}
 
@@ -56,7 +59,7 @@ public class ShiDianFangKuanCalcStrategy implements ExcelDataCalculateStrategy {
 	private String getMonth(Map<String, String> inputRow) {
 		String rawMonth = inputRow.get("入账月份");
 		try {
-			Date d = new SimpleDateFormat("m/d/yy").parse("1/1/19");
+			Date d = new SimpleDateFormat("M/d/yy").parse(rawMonth);
 			return new SimpleDateFormat("yyyy-MM").format(d);
 		} catch (ParseException e) {
 			throw new InvalidParameterException("The input date format is not \"m/d/yy\", please check:" + rawMonth);

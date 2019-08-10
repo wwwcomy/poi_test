@@ -1,5 +1,7 @@
 package com.iteye.wwwcomy.poi.util;
 
+import java.text.DecimalFormat;
+
 import org.apache.commons.lang3.StringUtils;
 
 public class NumberFormatUtil {
@@ -17,4 +19,25 @@ public class NumberFormatUtil {
 		}
 		return formatAsHundredMillion(Double.valueOf(input));
 	}
+
+	/**
+	 * for format pattern, please refer to
+	 * https://docs.oracle.com/javase/7/docs/api/java/text/DecimalFormat.html
+	 * 
+	 * @param input
+	 * @return
+	 */
+	public static String formatAsTwoDigitPercentage(double input) {
+		DecimalFormat df = (DecimalFormat) DecimalFormat.getPercentInstance();
+		df.applyPattern("#0.00%");
+		return String.valueOf(df.format(input));
+	}
+
+	public static String formatAsTwoDigitPercentage(String input) {
+		if (StringUtils.isBlank(input)) {
+			return "N/A";
+		}
+		return formatAsTwoDigitPercentage(Double.valueOf(input));
+	}
+
 }

@@ -14,12 +14,14 @@ import com.iteye.wwwcomy.poi.service.calc.Vintage12CalcStrategy;
 import com.iteye.wwwcomy.poi.service.calc.Vintage1CalcStrategy;
 import com.iteye.wwwcomy.poi.service.calc.Vintage6CalcStrategy;
 import com.iteye.wwwcomy.poi.service.calc.VintageCalcStrategy;
+import com.iteye.wwwcomy.poi.util.NumberFormatUtil;
 
 public class ExcelDataCalculateService implements ILPService {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	private ExcelDao excelDao;
 	public String sheet1 = "表1";
 	public String sheet2 = "表2";
+	private int lastCol = 8;
 
 	private Map<String, ExcelDataCalculateStrategy> typeAndStrategyRegistry = new HashMap<String, ExcelDataCalculateStrategy>();
 
@@ -35,19 +37,25 @@ public class ExcelDataCalculateService implements ILPService {
 	public void doLoveLaoPoService() {
 		List<Map<String, String>> sheet1Content = excelDao.readToList(sheet1);
 		List<Map<String, String>> sheet2Content = excelDao.readToList(sheet2);
+		int l = 0;
 		for (Map<String, String> line : sheet1Content) {
+			l++;
 			if (line.get("助贷码").matches(".*\n.*")) {
 				logger.info("Skip Line as it includes more than 1 助贷码");
+				excelDao.updateCell(sheet1, l, lastCol, "more than 1 助贷码");
 				continue;
 			}
 			String type = line.get("类型");
 			if (!typeAndStrategyRegistry.containsKey(type)) {
 				logger.info("No strategy defined for type {}", type);
+				excelDao.updateCell(sheet1, l, lastCol, "type->" + type);
 				continue;
 			}
-			logger.info("Type {} --> Result {}", type,
-					typeAndStrategyRegistry.get(type).getResult(line, sheet2Content));
+			String result = typeAndStrategyRegistry.get(type).getResult(line, sheet2Content);
+			logger.info("Type {} --> Result {}", type, result);
+			excelDao.updateCell(sheet1, l, lastCol, NumberFormatUtil.formatAsTwoDigitPercentage(result));
 		}
+		excelDao.save();
 	}
 
 	public void setExcelDao(ExcelDao excelDao) {
