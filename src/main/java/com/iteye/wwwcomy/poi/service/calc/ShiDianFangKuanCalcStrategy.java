@@ -40,7 +40,7 @@ public class ShiDianFangKuanCalcStrategy implements ExcelDataCalculateStrategy {
 				.mapToDouble(row -> Double.valueOf(row.get("放款金额"))).sum();
 		double numerator = 0.0;
 		Map<Object, List<Map<String, String>>> groupedMap = filteredSheet2Result.stream()
-				.collect(Collectors.groupingBy(o -> o.get("入账月份")));
+				.collect(Collectors.groupingBy(o -> getMonth(o)));
 		for (Object eachMonth : groupedMap.keySet()) {
 			List<Map<String, String>> monthDataList = groupedMap.get(eachMonth);
 			Optional<Map<String, String>> maxItem = monthDataList.stream()
@@ -48,6 +48,11 @@ public class ShiDianFangKuanCalcStrategy implements ExcelDataCalculateStrategy {
 			numerator += Double.valueOf(maxItem.get().get("逾期余额"));
 		}
 		return numerator / denominator;
+	}
+
+	private String getMonth(Map<String, String> inputRow) {
+		String rawMonth = inputRow.get("入账月份");
+		return rawMonth;
 	}
 
 	private List<Map<String, String>> filter(String unionCodeSheet1, String overdueSheet1,

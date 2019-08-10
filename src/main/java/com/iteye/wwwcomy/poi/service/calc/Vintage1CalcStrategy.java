@@ -2,8 +2,10 @@ package com.iteye.wwwcomy.poi.service.calc;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -32,14 +34,9 @@ public class Vintage1CalcStrategy implements ExcelDataCalculateStrategy {
 	}
 
 	private double getMaxLoanOverduePercentage(List<Map<String, String>> filteredSheet2Result) {
-		double maxPercentage = 0.0;
-		for (Map<String, String> row : filteredSheet2Result) {
-			double tmpLoanOverduePercentage = Double.parseDouble(row.get("放款逾期率"));
-			if (tmpLoanOverduePercentage > maxPercentage) {
-				maxPercentage = tmpLoanOverduePercentage;
-			}
-		}
-		return maxPercentage;
+		Optional<Map<String, String>> max = filteredSheet2Result.stream()
+				.max(Comparator.comparingDouble(o -> Double.parseDouble(o.get("放款逾期率"))));
+		return Double.parseDouble(max.get().get("放款逾期率"));
 	}
 
 	private List<Map<String, String>> filter(String unionCodeSheet1, String overdueSheet1,
