@@ -54,7 +54,8 @@ public class ShiDianFangKuanCalcStrategy implements ExcelDataCalculateStrategy {
 			List<Map<String, String>> monthDataList = groupedMap.get(eachMonth);
 			Optional<Map<String, String>> maxItem = monthDataList.stream()
 					.max(Comparator.comparingInt(o -> Integer.valueOf(o.get("mob"))));
-			numerator += Double.valueOf(maxItem.get().get("逾期余额"));
+			numerator += monthDataList.stream().filter(o -> o.get("mob").equalsIgnoreCase(maxItem.get().get("mob")))
+					.mapToDouble(row -> Double.valueOf(row.get("逾期余额"))).sum();
 		}
 		return numerator / denominator;
 	}
