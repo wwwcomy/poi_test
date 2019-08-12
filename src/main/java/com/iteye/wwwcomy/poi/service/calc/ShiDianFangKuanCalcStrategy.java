@@ -21,11 +21,11 @@ import org.springframework.stereotype.Service;
 import com.iteye.wwwcomy.poi.exception.InvalidParameterException;
 
 /**
- * * 时点放款 <br>
+ * 时点放款 <br>
  * 表1.助贷码=表2.union_code，表1.逾期时间=表2.kpi，表2.入账月份为19年，
- * 分母：取所有表2.mob=0的表2.放款金额相加，分子：每一个月份分别取表2.mob最大的那行的表2.逾期余额的值，相加，取分子/分母 *
+ * 分母：取所有表2.mob=0的表2.放款金额相加，分子：每一个月份分别取表2.mob最大的那行的表2.逾期余额的值，相加，取分子/分母
  * 
- * @author xingnliu *
+ * @author xingnliu
  */
 @Service
 public class ShiDianFangKuanCalcStrategy implements ExcelDataCalculateStrategy {
@@ -34,7 +34,7 @@ public class ShiDianFangKuanCalcStrategy implements ExcelDataCalculateStrategy {
 	@Override
 	public String getResult(Map<String, String> currentRowInSheet1, List<Map<String, String>> sheet2Content) {
 		String unionCodeSheet1 = currentRowInSheet1.get("助贷码");
-		List<String> unionCodeListSheet1 = Arrays.asList(unionCodeSheet1.split("\r\n"));
+		List<String> unionCodeListSheet1 = Arrays.asList(unionCodeSheet1.split("\n"));
 		String overdueSheet1 = currentRowInSheet1.get("逾期时间");
 		List<Map<String, String>> filteredSheet2Result = filter(unionCodeListSheet1, overdueSheet1, sheet2Content);
 		double maxLoanOverduePercentage = getCaculateResult(filteredSheet2Result);
